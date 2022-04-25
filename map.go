@@ -44,3 +44,23 @@ func CopyMap(input map[string]interface{}) map[string]interface{} {
 
 	return res
 }
+
+func GetMapNestedValue(json map[string]interface{}, nestedKey []string) (val interface{}, ok bool) {
+	count := len(nestedKey)
+	if count == 0 || json == nil {
+		return nil, false
+	}
+
+	key := nestedKey[0]
+
+	val, ok = json[key]
+	if !ok || (count == 1) {
+		return val, ok
+	}
+
+	if subJson, ok := val.(map[string]interface{}); ok {
+		return GetMapNestedValue(subJson, nestedKey[1:])
+	} else {
+		return nil, false
+	}
+}
