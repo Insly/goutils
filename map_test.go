@@ -61,3 +61,43 @@ func TestMergeMaps(t *testing.T) {
 		})
 	}
 }
+
+func TestGetMapNestedValue(t *testing.T) {
+	type args struct {
+		json      map[string]interface{}
+		nestedKey []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want interface{}
+		ok   bool
+	}{
+		{
+			name: "Positive case",
+			args: args{
+				json:      map[string]interface{}{"key1": "val1", "key2": map[string]interface{}{"subkey2": "subval2"}},
+				nestedKey: []string{"key2", "subkey2"},
+			},
+			want: "subval2",
+			ok:   true,
+		},
+		{
+			name: "Negative case",
+			args: args{
+				json:      map[string]interface{}{"key1": "val1", "key2": map[string]interface{}{"subkey2": "subval2"}},
+				nestedKey: []string{"key2", "subkey3"},
+			},
+			want: nil,
+			ok:   false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if r, ok := GetMapNestedValue(tt.args.json, tt.args.nestedKey); (ok != tt.ok) || !reflect.DeepEqual(r, tt.want) {
+				t.Errorf("TestGetNestedValue() = %v, %t, want %v, %t", r, ok, tt.want, tt.ok)
+			}
+		})
+	}
+}
