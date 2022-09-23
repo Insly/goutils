@@ -1,5 +1,7 @@
 package goutils
 
+import "strconv"
+
 func MergeMaps(base, input map[string]interface{}) map[string]interface{} {
 	if base == nil {
 		return CopyMap(input)
@@ -63,4 +65,68 @@ func GetMapNestedValue(json map[string]interface{}, nestedKey []string) (val int
 	} else {
 		return nil, false
 	}
+}
+
+func ToString(list map[string]interface{}, key string) *string {
+	val, exists := list[key]
+	if exists {
+		if r, ok := val.(string); ok {
+			return &r
+		}
+	}
+	return nil
+}
+
+func ForceString(list map[string]interface{}, key string, defaultVal string) string {
+	r := ToString(list, key)
+	if r == nil {
+		return defaultVal
+	}
+	return *r
+}
+
+func ToInt(list map[string]interface{}, key string) *int {
+	val, exists := list[key]
+	if exists {
+		switch v := val.(type) {
+		case float64:
+			i := int(v)
+			return &i
+		case string:
+			if i, err := strconv.Atoi(v); err == nil {
+				return &i
+			}
+		default:
+			if i, ok := val.(int); ok {
+				return &i
+			}
+		}
+	}
+	return nil
+}
+
+func ForceInt(list map[string]interface{}, key string, defaultVal int) int {
+	r := ToInt(list, key)
+	if r == nil {
+		return defaultVal
+	}
+	return *r
+}
+
+func ToBool(list map[string]interface{}, key string) *bool {
+	val, exists := list[key]
+	if exists {
+		if r, ok := val.(bool); ok {
+			return &r
+		}
+	}
+	return nil
+}
+
+func ForceBool(list map[string]interface{}, key string, defaultVal bool) bool {
+	r := ToBool(list, key)
+	if r == nil {
+		return defaultVal
+	}
+	return *r
 }
