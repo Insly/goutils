@@ -68,3 +68,36 @@ func TestMergeSlices(t *testing.T) {
 		})
 	}
 }
+
+func TestUniqueElements(t *testing.T) {
+	type args struct {
+		slice []interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want []interface{}
+	}{
+		{
+			name: "Positive case string",
+			args: args{
+				slice: []interface{}{"1", "2", "3", "2"},
+			},
+			want: []interface{}{"1", "2", "3"},
+		},
+		{
+			name: "Positive case int",
+			args: args{
+				slice: []interface{}{1, 2, 3, 2},
+			},
+			want: []interface{}{1, 2, 3},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := UniqueElements(tt.args.slice); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("UniqueElements() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
