@@ -21,3 +21,15 @@ func MergeSlices(base, input []interface{}) []interface{} {
 
 	return result
 }
+
+func UniqueElements(slice []interface{}) []interface{} {
+	s := make([]interface{}, 0, len(slice))
+	exists := make(map[interface{}]bool)
+	for _, value := range slice {
+		if _, ok := exists[value]; !ok {
+			exists[value] = true
+			s = append(s, value)
+		}
+	}
+	return s
+}
