@@ -89,15 +89,22 @@ func ToInt(list map[string]interface{}, key string) *int {
 	val, exists := list[key]
 	if exists {
 		switch v := val.(type) {
+		case int:
+			return &v
 		case float64:
+			i := int(v)
+			return &i
+		case float32:
+			i := int(v)
+			return &i
+		case int64:
+			i := int(v)
+			return &i
+		case int32:
 			i := int(v)
 			return &i
 		case string:
 			if i, err := strconv.Atoi(v); err == nil {
-				return &i
-			}
-		default:
-			if i, ok := val.(int); ok {
 				return &i
 			}
 		}
@@ -125,6 +132,41 @@ func ToBool(list map[string]interface{}, key string) *bool {
 
 func ForceBool(list map[string]interface{}, key string, defaultVal bool) bool {
 	r := ToBool(list, key)
+	if r == nil {
+		return defaultVal
+	}
+	return *r
+}
+
+func ToFloat(list map[string]interface{}, key string) *float64 {
+	val, exists := list[key]
+	if exists {
+		switch v := val.(type) {
+		case float64:
+			return &v
+		case float32:
+			i := float64(v)
+			return &i
+		case int64:
+			i := float64(v)
+			return &i
+		case int32:
+			i := float64(v)
+			return &i
+		case int:
+			i := float64(v)
+			return &i
+		case string:
+			if i, err := strconv.ParseFloat(v, 64); err == nil {
+				return &i
+			}
+		}
+	}
+	return nil
+}
+
+func ForceFloat(list map[string]interface{}, key string, defaultVal float64) float64 {
+	r := ToFloat(list, key)
 	if r == nil {
 		return defaultVal
 	}
