@@ -144,7 +144,7 @@ func TestSliceHasElement(t *testing.T) {
 func TestSliceHasElementFunc(t *testing.T) {
 	t.Run("Test nil slice has no element with func", func(t *testing.T) {
 		var nilSlice []string
-		assert.False(t, SliceContainsElementFunc(nilSlice, func(idx int, el string) bool {
+		assert.False(t, SliceContainsElementFunc(nilSlice, func(el string) bool {
 			return false
 		}))
 	})
@@ -153,12 +153,12 @@ func TestSliceHasElementFunc(t *testing.T) {
 		slice := []string{"first", "second", "third"}
 
 		// Slice has element which contains "ir"
-		assert.True(t, SliceContainsElementFunc(slice, func(idx int, el string) bool {
+		assert.True(t, SliceContainsElementFunc(slice, func(el string) bool {
 			return strings.Contains(el, "ir")
 		}))
 
 		// Slice is missing element which contains "foo"
-		assert.False(t, SliceContainsElementFunc(slice, func(idx int, el string) bool {
+		assert.False(t, SliceContainsElementFunc(slice, func(el string) bool {
 			return strings.Contains(el, "foo")
 		}))
 	})
@@ -180,7 +180,7 @@ func TestSliceHasElementFunc(t *testing.T) {
 		}
 
 		// Slice has person with name "Foo" and age "99"
-		assert.True(t, SliceContainsElementFunc(slice, func(idx int, el Person) bool {
+		assert.True(t, SliceContainsElementFunc(slice, func(el Person) bool {
 			return el.Name == "Foo" && el.Age == 99
 		}))
 
@@ -203,7 +203,7 @@ func TestSliceHasElementFunc(t *testing.T) {
 		}
 
 		// Slice has person with name "Foo" and age "99"
-		assert.True(t, SliceContainsElementFunc(slice, func(idx int, el *Person) bool {
+		assert.True(t, SliceContainsElementFunc(slice, func(el *Person) bool {
 			return el != nil && el.Name == "Foo"
 		}))
 	})

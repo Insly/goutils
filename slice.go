@@ -46,9 +46,9 @@ func SliceContainsElement[Element comparable](slice []Element, el Element) bool 
 }
 
 // SliceContainsElementFunc returns true if the comparisonFunc for an element returns true
-func SliceContainsElementFunc[Element comparable](slice []Element, comparisonFunc func(idx int, el Element) bool) bool {
-	for idx, v := range slice {
-		if comparisonFunc(idx, v) {
+func SliceContainsElementFunc[Element comparable](slice []Element, comparisonFunc func(el Element) bool) bool {
+	for _, v := range slice {
+		if comparisonFunc(v) {
 			return true
 		}
 	}
