@@ -2,7 +2,7 @@ package goutils
 
 import "time"
 
-func CalculateBusinessDaysBetweenDates(from time.Time, to time.Time) int {
+func CalculateBusinessDaysBetweenDates(from, to time.Time) int {
 	days := 0
 	for {
 		if from.After(to) || from.Equal(to) {
