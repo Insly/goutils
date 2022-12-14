@@ -3,6 +3,7 @@ package goutils
 import (
 	"github.com/stretchr/testify/assert"
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -100,4 +101,18 @@ func TestGetMapNestedValue(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMapToSlice(t *testing.T) {
+	testMap := map[string]string{
+		"one":   "two",
+		"three": "four",
+	}
+
+	slice := MapToSlice(testMap)
+	sort.SliceStable(slice, func(i, j int) bool {
+		return slice[i] > slice[j]
+	})
+
+	assert.Equal(t, []string{"two", "four"}, slice)
 }
