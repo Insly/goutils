@@ -174,7 +174,7 @@ func ForceFloat(list map[string]interface{}, key string, defaultVal float64) flo
 }
 
 // MapToSlice extracts map values into a slice
-func MapToSlice[key comparable, value comparable](input map[key]value) []value {
+func MapToSlice[key comparable, value any](input map[key]value) []value {
 	slice := make([]value, 0, len(input))
 	for _, v := range input {
 		slice = append(slice, v)
