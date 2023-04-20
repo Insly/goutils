@@ -33,6 +33,31 @@ func MergeMaps(base, input map[string]interface{}) map[string]interface{} {
 	return result
 }
 
+func MergeNestedMaps(base, input map[string]interface{}) map[string]interface{} {
+	if base == nil {
+		return CopyMap(input)
+	}
+	if input == nil {
+		return CopyMap(base)
+	}
+
+	result := CopyMap(base)
+	for k, v := range input {
+		switch sub := v.(type) {
+		case map[string]interface{}:
+			if baseSubMap, isMap := result[k].(map[string]interface{}); isMap {
+				result[k] = MergeNestedMaps(baseSubMap, sub)
+			} else {
+				result[k] = v
+			}
+		default:
+			result[k] = v
+		}
+	}
+
+	return result
+}
+
 func CopyMap(input map[string]interface{}) map[string]interface{} {
 	res := make(map[string]interface{}, len(input))
 	for k, v := range input {
