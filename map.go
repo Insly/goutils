@@ -1,6 +1,15 @@
 package goutils
 
-import "strconv"
+import (
+	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
+	"crypto/sha512"
+	"encoding/json"
+	"fmt"
+	"hash"
+	"strconv"
+)
 
 func MergeMaps(base, input map[string]interface{}) map[string]interface{} {
 	if base == nil {
@@ -206,4 +215,27 @@ func MapToSlice[key comparable, value any](input map[key]value) []value {
 	}
 
 	return slice
+}
+
+func UniqueHash[key comparable, value any](input map[key]value, cryptoAlgo string) string {
+	v, err := json.Marshal(input)
+	if err != nil {
+		return ""
+	}
+
+	var h hash.Hash
+
+	switch cryptoAlgo {
+	case "sha1":
+		h = sha1.New()
+	case "sha", "sha256":
+		h = sha256.New()
+	case "sha512":
+		h = sha512.New()
+	default:
+		h = md5.New()
+	}
+	h.Write(v)
+
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
