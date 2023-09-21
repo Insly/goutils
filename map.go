@@ -148,8 +148,33 @@ func ForceInt(list map[string]interface{}, key string, defaultVal int) int {
 func ToBool(list map[string]interface{}, key string) *bool {
 	val, exists := list[key]
 	if exists {
-		if r, ok := val.(bool); ok {
-			return &r
+		switch v := val.(type) {
+		case bool:
+			return &v
+		case int:
+			if v == 1 {
+				b := true
+				return &b
+			} else if v == 0 {
+				b := false
+				return &b
+			}
+		case string:
+			if v == "1" {
+				b := true
+				return &b
+			} else if v == "0" {
+				b := false
+				return &b
+			}
+		case float64:
+			if v == 1.0 {
+				b := true
+				return &b
+			} else if v == 0.0 {
+				b := false
+				return &b
+			}
 		}
 	}
 	return nil
